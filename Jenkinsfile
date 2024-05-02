@@ -1,29 +1,49 @@
 pipeline {
-    agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/sasikanth1531/nodejs-jenkins.git'
-            }
-        }
-        
-        stage('Docker build and push') {
-            steps {
-                sh "/usr/bin/docker build -t nodeapp:latest ."
-                
-                withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-                    sh "docker tag nodeapp:latest sasikanth777/nodejs:v1"
-                    sh "docker push sasikanth777/nodejs:v1"
-                }
-            }
-        }
+  environment {
+    dockerimagename = sasikanth/nodeapp"
+    dockerImage = "node"
+  }
 
-        stage('Kubernetes deploy') {
-            steps {
-                sh 'kubernetesDeploy(configs: "deployment.yml", kubeconfigId: "kubernetes")'
-            }
-        }
+  agent any
+
+  stages {
+
+    stage('Checkout Source') {
+      steps {
+        git 'https://github.com/shazforiot/nodeapp_test.git'
+      }
     }
+
+    stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build dockerimagename
+        }
+      }
+    }
+
+    stage('Pushing Image') {
+      environment {
+               registryCredential = 'dockerhublogin'
+           }
+      steps{
+        script {
+          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+
+    stage('Deploying App to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
+        }
+      }
+    }
+
+  }
+
 }
