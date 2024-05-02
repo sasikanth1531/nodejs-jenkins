@@ -31,7 +31,7 @@ pipeline {
 
         stage('Docker push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: , usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                     sh "docker tag nodejs:v1 sasikanth777/nodejs:v1"
                     sh "docker push sasikanth777/nodejs:v1"
