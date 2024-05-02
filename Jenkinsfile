@@ -31,14 +31,14 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-                    sh "docker tag nodejs:v1 sasikanth777/nodejs:v1"
+                    sh "docker tag nodeapp:latest sasikanth777/nodejs:v1"
                     sh "docker push sasikanth777/nodejs:v1"
                     sh "docker logout"
                 }
             }
         }
 
-        stage('k8s deploy') {
+        stage('Kubernetes deploy') {
             steps {
                 sh 'kubernetesDeploy(configs: "deployment.yml", kubeconfigId: "kubernetes")'
             }
