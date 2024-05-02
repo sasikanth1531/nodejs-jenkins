@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                 git 'https://github.com/shazforiot/nodeapp_test.git'
+                git 'https://github.com/shazforiot/nodeapp_test.git'
             }
         }
         
@@ -15,17 +15,15 @@ pipeline {
             }
         }
 
-        stage('Build ') {
+        stage('Build') {
             steps {
                 sh "npm run build"
-               
             }
         }
 
-        stage('Build iamge') {
+        stage('Build image') {
             steps {
                 sh "docker build -t nodeapp:latest ."
-                
             }
         }
 
@@ -36,14 +34,13 @@ pipeline {
                     sh "docker tag nodejs:v1 sasikanth777/nodejs:v1"
                     sh "docker push sasikanth777/nodejs:v1"
                     sh "docker logout"
-        
-        stage('k8s deploy') {
-            steps {
-                sh "kubernetesDeploy(configs: "depolyment.yml", kubeconfigId: "kubernetes")"
-                
+                }
             }
         }
 
+        stage('k8s deploy') {
+            steps {
+                sh 'kubernetesDeploy(configs: "deployment.yml", kubeconfigId: "kubernetes")'
             }
         }
     }
