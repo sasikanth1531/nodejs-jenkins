@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         dockerimagename = "sasikanth/nodeapp"
-        dockerImage = ""
+        dockerImage = "node"
     }
 
     agent any
@@ -45,4 +45,3 @@ pipeline {
         }
     }
 }
-`
