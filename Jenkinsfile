@@ -10,7 +10,7 @@ pipeline {
         
         stage('Docker build and push') {
             steps {
-                sh "docker build -t nodeapp:latest ."
+                sh "/usr/bin/docker build -t nodeapp:latest ."
                 
                 withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
