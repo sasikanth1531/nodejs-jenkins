@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                 git 'https://github.com/shazforiot/nodeapp_test.git'
             }
         }
         
