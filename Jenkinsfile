@@ -33,7 +33,6 @@ pipeline {
                     sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                     sh "docker tag nodeapp:latest sasikanth777/nodejs:v1"
                     sh "docker push sasikanth777/nodejs:v1"
-                    sh "docker logout"
                 }
             }
         }
